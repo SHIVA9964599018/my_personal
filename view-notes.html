@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>View Notes</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .note {
+      background: white;
+      margin: 15px auto;
+      padding: 15px;
+      border-left: 6px solid #4caf50;
+      border-radius: 10px;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .note h2 {
+      margin: 0;
+      color: #333;
+    }
+    .note p {
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Notes</h1>
+  <div id="notes-container"></div>
+
+  <script>
+    const supabaseUrl = "https://wzgchcvyzskespcfrjvi.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ";
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function loadNotes() {
+      const { data, error } = await supabase.from("notes").select("*").order("id", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching notes:", error.message);
+        return;
+      }
+
+      const container = document.getElementById("notes-container");
+      data.forEach(note => {
+        const noteDiv = document.createElement("div");
+        noteDiv.className = "note";
+        noteDiv.innerHTML = `<h2>${note.heading}</h2><p>${note.description}</p>`;
+        container.appendChild(noteDiv);
+      });
+    }
+
+    loadNotes();
+  </script>
+</body>
+</html>
