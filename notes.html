@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Notes</title>
+</head>
+<body>
+  <h1>Add a Note</h1>
+  <form id="note-form">
+    Heading: <input type="text" id="heading"><br><br>
+    Description: <textarea id="description"></textarea><br><br>
+    <button type="submit">Save Note</button>
+  </form>
+  <p id="message"></p>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://wzgchcvyzskespcfrjvi.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    document.getElementById('note-form').addEventListener('submit', async function(e) {
+      e.preventDefault()
+
+      const heading = document.getElementById('heading').value
+      const description = document.getElementById('description').value
+
+      const { error } = await supabase.from('notes').insert([{ heading, description }])
+
+      document.getElementById('message').textContent = error ? error.message : 'Note saved successfully!'
+    })
+  </script>
+</body>
+</html>
