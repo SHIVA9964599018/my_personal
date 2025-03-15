@@ -10,35 +10,66 @@
       margin: 0;
       padding: 20px;
     }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 12px;
+    }
+
+    nav a {
+      color: #ecf0f1;
+      margin-right: 20px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
     h1 {
       text-align: center;
     }
-    .note {
-      background: white;
-      margin: 15px auto;
-      padding: 15px;
-      border-left: 6px solid #4caf50;
-      border-radius: 10px;
-      max-width: 600px;
+
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background-color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .note h2 {
-      margin: 0;
-      color: #333;
+
+    th, td {
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      text-align: left;
     }
-    .note p {
-      color: #555;
-      margin-top: 8px;
+
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
     }
   </style>
 </head>
 <body>
- <nav style="background-color: #2c3e50; padding: 12px;">
-    <a href="index.html" style="color: #ecf0f1; margin-right: 20px; text-decoration: none; font-weight: bold;">Add Notes</a>
-    <a href="view-notes.html" style="color: #ecf0f1; text-decoration: none; font-weight: bold;">View Notes</a>
+  <nav>
+    <a href="index.html">Add Notes</a>
+    <a href="view-notes.html">View Notes</a>
   </nav>
+
   <h1>My Notes</h1>
-  <div id="notes-container"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Heading</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody id="notes-body">
+      <!-- Notes will be inserted here -->
+    </tbody>
+  </table>
 
   <script>
     const supabaseUrl = "https://wzgchcvyzskespcfrjvi.supabase.co";
@@ -53,12 +84,11 @@
         return;
       }
 
-      const container = document.getElementById("notes-container");
+      const tbody = document.getElementById("notes-body");
       data.forEach(note => {
-        const noteDiv = document.createElement("div");
-        noteDiv.className = "note";
-        noteDiv.innerHTML = `<h2>${note.heading}</h2><p>${note.description}</p>`;
-        container.appendChild(noteDiv);
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${note.heading}</td><td>${note.description}</td>`;
+        tbody.appendChild(row);
       });
     }
 
