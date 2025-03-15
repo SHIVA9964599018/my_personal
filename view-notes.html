@@ -1,73 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>View Notes</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f3f3f3;
       margin: 0;
-      background-color: #f2f2f2;
+      padding: 20px;
     }
 
     nav {
       background-color: #2c3e50;
-      padding: 15px;
-      display: flex;
-      gap: 20px;
+      padding: 12px;
     }
 
     nav a {
-      color: white;
+      color: #ecf0f1;
+      margin-right: 20px;
       text-decoration: none;
       font-weight: bold;
-      font-size: 18px;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
     }
 
     h1 {
       text-align: center;
-      margin-top: 40px;
-      font-size: 36px;
       color: #333;
     }
 
     table {
       width: 80%;
-      margin: 40px auto;
+      margin: 20px auto;
       border-collapse: collapse;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     th, td {
       padding: 15px;
       text-align: left;
-      border: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
     }
 
     th {
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
     }
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
+    tr:hover {
+      background-color: #f5f5f5;
     }
   </style>
 </head>
 <body>
-
   <nav>
     <a href="index.html">Add Notes</a>
     <a href="view-notes.html">View Notes</a>
   </nav>
 
   <h1>My Notes</h1>
-
   <table>
     <thead>
       <tr>
@@ -76,24 +69,18 @@
       </tr>
     </thead>
     <tbody id="notesTableBody">
-      <!-- Notes will be inserted here -->
+      <!-- Notes will appear here -->
     </tbody>
   </table>
 
-  <!-- Supabase library -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <!-- Script after Supabase is loaded -->
   <script>
     window.addEventListener('DOMContentLoaded', async () => {
-      const supabaseUrl = 'https://ndjwxoyzsezkrdbjhkmc.supabase.co';
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kand4b3l6c2V6a3JkYmpha21jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MDY0MDcsImV4cCI6MTcyNjA4MjQwN30.NTgJh7vDtwHgGmt5fwDKhvW6oEFw_59G3rIE8MWG0Y4';
+      const supabaseUrl = 'https://wzgchcvyzskespcfrjvi.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ';
       const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
       async function fetchNotes() {
-        const { data, error } = await supabase
-          .from('notes')
-          .select('*');
+        const { data, error } = await supabase.from('notes').select('*').order('id', { ascending: false });
 
         const tableBody = document.getElementById('notesTableBody');
         tableBody.innerHTML = '';
@@ -103,7 +90,7 @@
           return;
         }
 
-        if (data && data.length > 0) {
+        if (data.length > 0) {
           data.forEach(note => {
             const row = document.createElement('tr');
             row.innerHTML = `
