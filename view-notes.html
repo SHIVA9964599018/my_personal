@@ -80,43 +80,47 @@
     </tbody>
   </table>
 
-  <!-- Include Supabase JS (non-module version) -->
+  <!-- Supabase library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Script after Supabase is loaded -->
   <script>
-    const supabaseUrl = 'https://ndjwxoyzsezkrdbjhkmc.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kand4b3l6c2V6a3JkYmpha21jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MDY0MDcsImV4cCI6MTcyNjA4MjQwN30.NTgJh7vDtwHgGmt5fwDKhvW6oEFw_59G3rIE8MWG0Y4';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    window.addEventListener('DOMContentLoaded', async () => {
+      const supabaseUrl = 'https://ndjwxoyzsezkrdbjhkmc.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5kand4b3l6c2V6a3JkYmpha21jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTA1MDY0MDcsImV4cCI6MTcyNjA4MjQwN30.NTgJh7vDtwHgGmt5fwDKhvW6oEFw_59G3rIE8MWG0Y4';
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    async function fetchNotes() {
-      const { data, error } = await supabase
-        .from('notes')
-        .select('*');
+      async function fetchNotes() {
+        const { data, error } = await supabase
+          .from('notes')
+          .select('*');
 
-      if (error) {
-        console.error('Error fetching notes:', error.message);
-        return;
-      }
+        const tableBody = document.getElementById('notesTableBody');
+        tableBody.innerHTML = '';
 
-      const tableBody = document.getElementById('notesTableBody');
-      tableBody.innerHTML = '';
+        if (error) {
+          console.error('Error fetching notes:', error.message);
+          return;
+        }
 
-      if (data && data.length > 0) {
-        data.forEach(note => {
+        if (data && data.length > 0) {
+          data.forEach(note => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${note.heading}</td>
+              <td>${note.description}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        } else {
           const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${note.heading}</td>
-            <td>${note.description}</td>
-          `;
+          row.innerHTML = `<td colspan="2">No notes found.</td>`;
           tableBody.appendChild(row);
-        });
-      } else {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="2">No notes found.</td>`;
-        tableBody.appendChild(row);
+        }
       }
-    }
 
-    fetchNotes();
+      fetchNotes();
+    });
   </script>
 </body>
 </html>
