@@ -13,23 +13,27 @@
       text-align: center;
       color: #2c3e50;
     }
-    .collapsible {
-      background-color: #3498db;
-      color: white;
-      cursor: pointer;
-      padding: 14px;
-      width: 100%;
-      text-align: center;
-      font-size: 18px;
-      border: none;
-      outline: none;
-      transition: background-color 0.3s ease;
-      margin-top: 8px;
-      border-radius: 6px;
-    }
-    .collapsible:hover {
-      background-color: #2980b9;
-    }
+  .collapsible {
+  background-color: transparent; /* No full background */
+  color: #2c3e50;
+  cursor: pointer;
+  padding: 14px;
+  width: 100%;
+  text-align: left;
+  font-size: 18px;
+  border: none;
+  border-left: 6px solid #add8e6; /* Light blue line on the left */
+  outline: none;
+  transition: border-left 0.3s ease;
+  margin-top: 8px;
+  border-radius: 4px;
+}
+
+.collapsible:hover {
+  border-left: 6px solid #9acfe1; /* Darker blue on hover */
+  background-color: #f0f8ff; /* Optional subtle background on hover */
+}
+
     .content {
       display: none;
       padding: 10px 0;
