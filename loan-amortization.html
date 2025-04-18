@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loan Amortization</title>
+</head>
+<body>
+  <nav style="background-color: #2c3e50; padding: 12px;">
+    <a href="index.html" style="color: #ecf0f1; margin-right: 20px; text-decoration: none; font-weight: bold;">Add Notes</a>
+    <a href="view-notes.html" style="color: #ecf0f1; margin-right: 20px; text-decoration: none; font-weight: bold;">View Notes</a>
+    <a href="loan-amortization.html" style="color: #ecf0f1; text-decoration: none; font-weight: bold;">Loan Amortization</a>
+  </nav>
+
+  <h1>Loan Amortization Schedule</h1>
+  <table border="1" cellpadding="8" id="loan-table">
+    <thead>
+      <tr>
+        <th>Month Start</th>
+        <th>EMI</th>
+        <th>Interest Component</th>
+        <th>Principal Component</th>
+        <th>Closing Principal</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const supabaseUrl = 'https://wzgchcvyzskespcfrjvi.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ' // Keep your real key here
+    const supabase = createClient(supabaseUrl, supabaseKey)
+
+    async function loadData() {
+      const { data, error } = await supabase
+        .from('loan_amortization')
+        .select('*')
+        .order('month_start', { ascending: true })
+
+      const tbody = document.querySelector('#loan-table tbody')
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="5">${error.message}</td></tr>`
+        return
+      }
+
+      data.forEach(row => {
+        const tr = document.createElement('tr')
+        tr.innerHTML = `
+          <td>${row.month_start}</td>
+          <td>${row.emi}</td>
+          <td>${row.interest_component}</td>
+          <td>${row.principal_component}</td>
+          <td>${row.closing_principal}</td>
+        `
+        tbody.appendChild(tr)
+      })
+    }
+
+    loadData()
+  </script>
+</body>
+</html>
