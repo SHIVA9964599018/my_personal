@@ -2,22 +2,80 @@
 <html>
 <head>
   <title>Loan Amortization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 14px 20px;
+    }
+
+    nav a {
+      color: #ecf0f1;
+      margin-right: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #34495e;
+      margin-top: 30px;
+    }
+
+    table {
+      width: 90%;
+      margin: 30px auto;
+      border-collapse: collapse;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      background-color: #ffffff;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      padding: 12px;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ecf0f1;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #dff9fb;
+    }
+  </style>
 </head>
 <body>
-  <nav style="background-color: #2c3e50; padding: 12px;">
-    <a href="index.html" style="color: #ecf0f1; margin-right: 20px; text-decoration: none; font-weight: bold;">Add Notes</a>
-    <a href="view-notes.html" style="color: #ecf0f1; margin-right: 20px; text-decoration: none; font-weight: bold;">View Notes</a>
-    <a href="loan-amortization.html" style="color: #ecf0f1; text-decoration: none; font-weight: bold;">Loan Amortization</a>
+  <nav>
+    <a href="index.html">Add Notes</a>
+    <a href="view-notes.html">View Notes</a>
+    <a href="loan-amortization.html">Loan Amortization</a>
   </nav>
 
   <h1>Loan Amortization Schedule</h1>
-  <table border="1" cellpadding="8" id="loan-table">
+
+  <table id="loan-table">
     <thead>
       <tr>
         <th>Month Start</th>
         <th>EMI</th>
-        <th>Interest Component</th>
-        <th>Principal Component</th>
+        <th>Interest</th>
+        <th>Principal</th>
         <th>Closing Principal</th>
       </tr>
     </thead>
@@ -30,6 +88,12 @@
     const supabaseUrl = 'https://wzgchcvyzskespcfrjvi.supabase.co'
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ' // Keep your real key here
     const supabase = createClient(supabaseUrl, supabaseKey)
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr)
+      const options = { day: '2-digit', month: 'short', year: '2-digit' }
+      return date.toLocaleDateString('en-GB', options).replace(/ /g, '-')
+    }
 
     async function loadData() {
       const { data, error } = await supabase
@@ -47,7 +111,7 @@
       data.forEach(row => {
         const tr = document.createElement('tr')
         tr.innerHTML = `
-          <td>${row.month_start}</td>
+          <td>${formatDate(row.month_start)}</td>
           <td>${row.emi}</td>
           <td>${row.interest_component}</td>
           <td>${row.principal_component}</td>
@@ -56,6 +120,12 @@
         tbody.appendChild(tr)
       })
     }
+
+    loadData()
+  </script>
+</body>
+</html>
+
 
     loadData()
   </script>
