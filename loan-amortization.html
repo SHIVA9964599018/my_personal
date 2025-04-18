@@ -122,6 +122,7 @@
         table.innerHTML = `
           <thead>
             <tr>
+             <th>Installment</th>
               <th>Date</th>
               <th>EMI</th>
               <th>Principal</th>
@@ -132,6 +133,7 @@
           <tbody>
             ${grouped[year].map(r => `
               <tr>
+               <td>${r.installment_no}</td>
                 <td>${r.date}</td>
                 <td>${r.emi}</td>
                 <td>${r.principal_component}</td>
