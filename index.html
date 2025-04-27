@@ -34,7 +34,6 @@
 
 <p id="bike-history-message"></p>
 
-<hr>
 
 <h2>Bike History Records</h2>
 <table border="1" id="bike-history-table">
@@ -70,69 +69,6 @@
 </body>
 </html>
 
-
-<script>
-  // Function to load bike history records
-  function loadBikeHistory() {
-    fetch('/api/get-bike-history')  // <-- Adjust this endpoint in your backend
-      .then(response => response.json())
-      .then(data => {
-        const tableBody = document.querySelector("#bike-history-table tbody");
-        tableBody.innerHTML = ""; // Clear existing rows
-
-        data.forEach(record => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${record.date_changed}</td>
-            <td>${record.amount}</td>
-            <td>${record.at_distance}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      })
-      .catch(error => {
-        console.error("Error loading bike history:", error);
-      });
-  }
-
-  // Function to handle form submission
-  document.getElementById("add-bike-history-form").addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    const dateChanged = document.getElementById("date_changed").value;
-    const amount = document.getElementById("amount").value;
-    const atDistance = document.getElementById("at_distance").value;
-
-    const payload = {
-      date_changed: dateChanged,
-      amount: parseFloat(amount),
-      at_distance: parseInt(atDistance)
-    };
-
-    fetch('/api/add-bike-history', {  // <-- your BE endpoint
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        document.getElementById("bike-history-message").textContent = "Bike record added successfully!";
-        document.getElementById("add-bike-history-form").reset();
-        loadBikeHistory(); // Refresh the table after successful addition
-      } else {
-        document.getElementById("bike-history-message").textContent = "Failed to add bike record.";
-      }
-    })
-    .catch(error => {
-      console.error("Error adding bike history:", error);
-      document.getElementById("bike-history-message").textContent = "Error occurred while adding bike record.";
-    });
-  });
-
-  // Load bike history initially on page load
-  window.onload = loadBikeHistory;
+<script type="module" src="bike-history.js"></script>
 </script>
 
