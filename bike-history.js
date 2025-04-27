@@ -1,9 +1,10 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 // Initialize Supabase
-const supabaseUrl = 'https://YOUR-PROJECT-URL.supabase.co';
-const supabaseKey = 'YOUR-ANON-KEY';
-const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const supabaseUrl = 'https://wzgchcvyzskespcfrjvi.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2NoY3Z5enNrZXNwY2ZyanZpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE4NjQwNDEsImV4cCI6MjA1NzQ0MDA0MX0.UuAgu4quD9Vg80tOUSkfGJ4doOT0CUFEUeoHsiyeNZQ'
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
 // Function to load existing bike history
 async function loadBikeHistory() {
