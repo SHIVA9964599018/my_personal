@@ -76,9 +76,71 @@
       document.getElementById('message').textContent = error ? error.message : 'Note saved successfully!'
     })
   </script>
+
+   <h1>Chat with GPT-3.5 Turbo</h1>
+
+    <!-- Chat window to show messages -->
+    <div id="chat-window" style="border:1px solid #ccc; height:300px; overflow-y:auto; padding:10px; margin-bottom:10px;"></div>
+
+    <!-- Input and Send button -->
+    <input id="user-input" type="text" placeholder="Type your message..." style="width:80%; padding:5px;" />
+    <button onclick="sendMessage()" style="padding:5px 10px;">Send</button>
+
+    <script>
+    // Your OpenAI API key (You MUST hide it later! Never expose real key on GitHub!!)
+    const OPENAI_API_KEY = 'FAxCfyBVROmH5wNbXXWYGQ7cI0MHlWhu1xnL3jubRwkC1scvxZZhbTtZIHRS3VNVhkz3RiNSGKT3BlbkFJCWsiQnVfpC09h6wkUEXwuLSnvucMK1QtCI_PUijgyMhGIkO6J0-ySMYon7HS_XC5MFsxev3csA'; // <<< PUT your real key here (starts with sk-...)
+
+    async function sendMessage() {
+        const userInput = document.getElementById('user-input').value;
+        if (!userInput.trim()) return; // Don't send empty message
+
+        // Show user message
+        const chatWindow = document.getElementById('chat-window');
+        chatWindow.innerHTML += `<div><strong>You:</strong> ${userInput}</div>`;
+
+        // Clear input box
+        document.getElementById('user-input').value = '';
+
+        try {
+            // Send request to OpenAI
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [{ role: "user", content: userInput }]
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                const botReply = data.choices[0].message.content;
+
+                // Show ChatGPT reply
+                chatWindow.innerHTML += `<div><strong>ChatGPT:</strong> ${botReply}</div>`;
+            } else {
+                // Handle error returned from API
+                chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> ${data.error.message}</div>`;
+            }
+
+        } catch (error) {
+            // Handle network or other errors
+            chatWindow.innerHTML += `<div style="color:red;"><strong>Error:</strong> ${error.message}</div>`;
+        }
+
+        // Auto-scroll chat to the bottom
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    </script>
 </body>
 </html>
 
 <script type="module" src="bike-history.js"></script>
 </script>
+
+
 
